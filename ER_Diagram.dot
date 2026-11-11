@@ -1,0 +1,53 @@
+digraph ER {
+  graph [rankdir=TB, bgcolor="white", pad="0.08", nodesep="0.20", ranksep="0.34", splines=polyline,
+         fontname="Arial", fontsize=11, labelloc=t, label="MEDICARE - ENTITY RELATIONSHIP DIAGRAM", size="3.35,8.55!", ratio=fill];
+  node [shape=plain, fontname="Arial", fontsize=9];
+  edge [fontname="Arial", fontsize=8, color="#425466", fontcolor="#334155", penwidth=1.1, arrowsize=0.65];
+
+  Departments [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Departments</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK dept_id</TD></TR><TR><TD ALIGN="LEFT">UQ dept_name</TD></TR><TR><TD ALIGN="LEFT">location</TD></TR></TABLE> >];
+  Doctors [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Doctors</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK doctor_id</TD></TR><TR><TD ALIGN="LEFT">first_name, last_name</TD></TR><TR><TD ALIGN="LEFT">specialization</TD></TR><TR><TD ALIGN="LEFT">UQ phone, email</TD></TR><TR><TD ALIGN="LEFT">consultation_fee</TD></TR><TR><TD ALIGN="LEFT">FK dept_id</TD></TR><TR><TD ALIGN="LEFT">joined_on</TD></TR></TABLE> >];
+  Patients [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Patients</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK patient_id</TD></TR><TR><TD ALIGN="LEFT">first_name, last_name</TD></TR><TR><TD ALIGN="LEFT">gender, date_of_birth</TD></TR><TR><TD ALIGN="LEFT">UQ phone, email</TD></TR><TR><TD ALIGN="LEFT">address, blood_group</TD></TR><TR><TD ALIGN="LEFT">registered_on</TD></TR></TABLE> >];
+  Appointments [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Appointments</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK appointment_id</TD></TR><TR><TD ALIGN="LEFT">FK patient_id, doctor_id</TD></TR><TR><TD ALIGN="LEFT">appointment_date, appointment_time</TD></TR><TR><TD ALIGN="LEFT">status, reason</TD></TR><TR><TD ALIGN="LEFT">G active_status (generated)</TD></TR></TABLE> >];
+  Medical_Records [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Medical_Records</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK record_id</TD></TR><TR><TD ALIGN="LEFT">UQ, FK appointment_id</TD></TR><TR><TD ALIGN="LEFT">diagnosis, notes</TD></TR><TR><TD ALIGN="LEFT">record_date</TD></TR></TABLE> >];
+  Bills [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Bills</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK bill_id</TD></TR><TR><TD ALIGN="LEFT">UQ, FK appointment_id</TD></TR><TR><TD ALIGN="LEFT">bill_date</TD></TR><TR><TD ALIGN="LEFT">consult_charge, medicine_charge</TD></TR><TR><TD ALIGN="LEFT">total_amount, payment_status</TD></TR></TABLE> >];
+  Prescriptions [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Prescriptions</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK prescription_id</TD></TR><TR><TD ALIGN="LEFT">FK record_id</TD></TR><TR><TD ALIGN="LEFT">prescription_date, advice</TD></TR></TABLE> >];
+  Payments [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Payments</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK payment_id</TD></TR><TR><TD ALIGN="LEFT">FK bill_id</TD></TR><TR><TD ALIGN="LEFT">payment_date, amount_paid</TD></TR><TR><TD ALIGN="LEFT">method</TD></TR></TABLE> >];
+  Prescription_Items [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Prescription_Items</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK, FK prescription_id</TD></TR><TR><TD ALIGN="LEFT">PK, FK medicine_id</TD></TR><TR><TD ALIGN="LEFT">dosage, duration_days</TD></TR><TR><TD ALIGN="LEFT">quantity</TD></TR></TABLE> >];
+  Medicines [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#64748b">
+    <TR><TD BGCOLOR="#1e4e79"><FONT COLOR="white"><B>Medicines</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT">PK medicine_id</TD></TR><TR><TD ALIGN="LEFT">UQ medicine_name</TD></TR><TR><TD ALIGN="LEFT">category, unit_price</TD></TR></TABLE> >];
+
+  {rank=min; Departments}
+  {rank=same; Doctors; Patients}
+  {rank=same; Medical_Records; Bills}
+  {rank=same; Prescriptions; Payments}
+  {rank=same; Prescription_Items; Medicines}
+
+  Departments -> Doctors [label="1 : N"];
+  Doctors -> Appointments [label="1 : N"];
+  Patients -> Appointments [label="1 : N"];
+  Appointments -> Medical_Records [label="1 : 0..1"];
+  Appointments -> Bills [label="1 : 0..1"];
+  Medical_Records -> Prescriptions [label="1 : N"];
+  Bills -> Payments [label="1 : N"];
+  Prescriptions -> Prescription_Items [label="1 : N"];
+  Medicines -> Prescription_Items [label="1 : N"];
+}
