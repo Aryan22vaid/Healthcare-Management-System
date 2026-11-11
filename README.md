@@ -94,9 +94,7 @@ After running the scripts, verify:
 - Script 09's payment consistency output shows `Consistent` for every bill.
 - Script 10 displays the GRANT/REVOKE results. The demo accounts are removed at the end of the script.
 
-## Screenshots for submission
 
-Add genuine screenshots captured from your own MySQL Workbench execution to `Documentation/Screenshots/`. Do not use mock or illustrative images as execution evidence. The report includes six labelled screenshot spaces: table creation, sample-data row counts, J4 medical history, aggregate analytics, transaction demonstration and `SHOW GRANTS` output.
 
 ## Optional application
 
